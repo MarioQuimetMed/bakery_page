@@ -7,7 +7,7 @@ jobs:
   test-node:
     executor:
       name: node/default
-      tag: "20.11"
+      tag: "20.19"
     steps:
       - checkout
 
@@ -21,7 +21,7 @@ jobs:
   build-node:
     executor:
       name: node/default
-      tag: "20.11"
+      tag: "20.19"
     steps:
       - checkout
 
@@ -43,7 +43,7 @@ jobs:
 
   deploy:
     docker:
-      - image: cimg/node:20.11
+      - image: cimg/node:20.19
     steps:
       - checkout
 
