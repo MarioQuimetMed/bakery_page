@@ -4,7 +4,7 @@ orbs:
   node: circleci/node@5
 
 jobs:
-  test-node:
+  ci-build:
     executor:
       name: node/default
       tag: "20.19"
@@ -15,21 +15,7 @@ jobs:
           pkg-manager: npm
 
       - run:
-          name: Run tests
-          command: npm test -- --watch=false --browsers=ChromeHeadless || npm test -- --watch=false || true
-
-  build-node:
-    executor:
-      name: node/default
-      tag: "20.19"
-    steps:
-      - checkout
-
-      - node/install-packages:
-          pkg-manager: npm
-
-      - run:
-          name: Build Angular project
+          name: CI - Build Angular project
           command: npm run build
 
       - persist_to_workspace:
@@ -41,7 +27,21 @@ jobs:
           path: dist
           destination: angular-build
 
-  deploy:
+  testing:
+    executor:
+      name: node/default
+      tag: "20.19"
+    steps:
+      - checkout
+
+      - node/install-packages:
+          pkg-manager: npm
+
+      - run:
+          name: Testing - Run unit tests
+          command: npm test -- --watch=false --browsers=ChromeHeadless
+
+  delivery:
     docker:
       - image: cimg/node:20.19
     steps:
@@ -55,49 +55,72 @@ jobs:
             - "SHA256:3ZolXeSG+6BOaJjWMujBO137eN0QwxSX550Hx6IFlt4"
 
       - run:
-          name: Install rsync
+          name: Delivery - Install deployment tools
           command: |
             sudo apt-get update
             sudo apt-get install -y rsync openssh-client
 
       - run:
-          name: Add droplet to known_hosts
+          name: Delivery - Add droplet to known_hosts
           command: |
             mkdir -p ~/.ssh
             ssh-keyscan -H "$DROPLET_HOST" >> ~/.ssh/known_hosts
 
       - run:
-          name: Detect Angular build folder
+          name: Delivery - Validate required environment variables
+          command: |
+            if [ -z "$DROPLET_HOST" ]; then
+              echo "ERROR: DROPLET_HOST no está configurado"
+              exit 1
+            fi
+
+            if [ -z "$DROPLET_USER" ]; then
+              echo "ERROR: DROPLET_USER no está configurado"
+              exit 1
+            fi
+
+            if [ -z "$DEPLOY_PATH" ]; then
+              echo "ERROR: DEPLOY_PATH no está configurado"
+              exit 1
+            fi
+
+            echo "Variables de entorno requeridas configuradas correctamente"
+
+      - run:
+          name: Delivery - Detect Angular build folder
           command: |
             echo "Contenido de dist:"
             find dist -maxdepth 3 -type d
 
       - run:
-          name: Deploy Angular app to DigitalOcean Droplet
+          name: Delivery - Deploy Angular app to DigitalOcean Droplet
           command: |
             BUILD_DIR=$(find dist -name index.html -exec dirname {} \; | head -n 1)
 
             if [ -z "$BUILD_DIR" ]; then
-              echo "No se encontró index.html dentro de dist/"
+              echo "ERROR: No se encontró index.html dentro de dist/"
               exit 1
             fi
 
             echo "Deploying from: $BUILD_DIR"
-
             rsync -avz --delete "$BUILD_DIR"/ "$DROPLET_USER@$DROPLET_HOST:$DEPLOY_PATH"
 
+      - run:
+          name: Delivery - Confirm delivery
+          command: echo "Entrega completada correctamente"
+
 workflows:
-  build-test-and-deploy:
+  ci-testing-delivery:
     jobs:
-      - test-node
+      - ci-build
 
-      - build-node:
+      - testing:
           requires:
-            - test-node
+            - ci-build
 
-      - deploy:
+      - delivery:
           requires:
-            - build-node
+            - testing
           filters:
             branches:
               only:
