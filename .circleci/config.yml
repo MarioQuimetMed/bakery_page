@@ -39,7 +39,7 @@ jobs:
 
       - run:
           name: Testing - Run unit tests
-          command: npm test -- --watch=false --browsers=ChromeHeadless
+          command: CI=1 npm test -- --watch=false
 
   delivery:
     docker:
