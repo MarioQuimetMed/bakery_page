@@ -1,3 +1,9 @@
 import { Routes } from '@angular/router';
+import { Login } from './features/login/login';
 
-export const routes: Routes = [];
+export const routes: Routes = [
+  { path: 'login', component: Login },
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  // Las siguientes páginas las iremos enlazando aquí abajo
+  { path: '**', redirectTo: 'login' }
+];
