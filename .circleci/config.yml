@@ -4,7 +4,7 @@ orbs:
   node: circleci/node@5
 
 jobs:
-  ci-build:
+  build:
     executor:
       name: node/default
       tag: "20.19"
@@ -41,7 +41,7 @@ jobs:
           name: Testing - Run unit tests
           command: CI=1 npm test -- --watch=false
 
-  delivery:
+  deploy:
     docker:
       - image: cimg/node:20.19
     steps:
@@ -55,19 +55,19 @@ jobs:
             - "SHA256:3ZolXeSG+6BOaJjWMujBO137eN0QwxSX550Hx6IFlt4"
 
       - run:
-          name: Delivery - Install deployment tools
+          name: Deploy - Install deployment tools
           command: |
             sudo apt-get update
             sudo apt-get install -y rsync openssh-client
 
       - run:
-          name: Delivery - Add droplet to known_hosts
+          name: Deploy - Add droplet to known_hosts
           command: |
             mkdir -p ~/.ssh
             ssh-keyscan -H "$DROPLET_HOST" >> ~/.ssh/known_hosts
 
       - run:
-          name: Delivery - Validate required environment variables
+          name: Deploy - Validate required environment variables
           command: |
             if [ -z "$DROPLET_HOST" ]; then
               echo "ERROR: DROPLET_HOST no está configurado"
@@ -87,13 +87,13 @@ jobs:
             echo "Variables de entorno requeridas configuradas correctamente"
 
       - run:
-          name: Delivery - Detect Angular build folder
+          name: Deploy - Detect Angular build folder
           command: |
             echo "Contenido de dist:"
             find dist -maxdepth 3 -type d
 
       - run:
-          name: Delivery - Deploy Angular app to DigitalOcean Droplet
+          name: Deploy - Deploy Angular app to DigitalOcean Droplet
           command: |
             BUILD_DIR=$(find dist -name index.html -exec dirname {} \; | head -n 1)
 
@@ -106,19 +106,19 @@ jobs:
             rsync -avz --delete "$BUILD_DIR"/ "$DROPLET_USER@$DROPLET_HOST:$DEPLOY_PATH"
 
       - run:
-          name: Delivery - Confirm delivery
-          command: echo "Entrega completada correctamente"
+          name: Deploy - Confirm deployment
+          command: echo "Despliegue completado correctamente"
 
 workflows:
-  ci-testing-delivery:
+  ci-testing-deploy:
     jobs:
-      - ci-build
+      - build
 
       - testing:
           requires:
-            - ci-build
+            - build
 
-      - delivery:
+      - deploy:
           requires:
             - testing
           filters:

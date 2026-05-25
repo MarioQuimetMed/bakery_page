@@ -1,9 +1,10 @@
 import { Routes } from '@angular/router';
-import { Login } from './features/login/login';
 
 export const routes: Routes = [
-  { path: 'login', component: Login },
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
-  // Las siguientes páginas las iremos enlazando aquí abajo
-  { path: '**', redirectTo: 'login' }
+  { path: '', redirectTo: 'productos', pathMatch: 'full' },
+  {
+    path: 'productos',
+    loadComponent: () => import('./features/productos/productos').then((m) => m.Productos),
+  },
+  { path: '**', redirectTo: 'productos' }
 ];

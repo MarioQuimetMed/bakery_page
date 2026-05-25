@@ -1,0 +1,469 @@
+:host {
+	display: block;
+	width: 100%;
+	color: #2d3748;
+	font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+.products-page {
+	position: relative;
+	z-index: 1;
+	width: min(1200px, calc(100% - 2rem));
+	margin: 0 auto;
+	padding: 3rem 0;
+}
+
+/* Header Styles */
+.products-header {
+	display: flex;
+	flex-direction: column;
+	gap: 1.5rem;
+	margin-bottom: 3rem;
+}
+
+.header-main h1 {
+	margin: 0;
+	font-size: 2.25rem;
+	font-weight: 700;
+	letter-spacing: -0.03em;
+	color: #1a202c;
+}
+
+.header-main p {
+	margin: 0.5rem 0 0;
+	font-size: 1rem;
+	color: #718096;
+}
+
+.header-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1rem;
+	align-items: center;
+}
+
+.search-box {
+	position: relative;
+	flex: 1;
+	min-width: 260px;
+}
+
+.search-box i {
+	position: absolute;
+	left: 1rem;
+	top: 50%;
+	transform: translateY(-50%);
+	color: #a0aec0;
+	font-size: 0.9rem;
+}
+
+.search-box input {
+	width: 100%;
+	padding: 0.75rem 1rem 0.75rem 2.5rem;
+	border: 1px solid #e2e8f0;
+	border-radius: 10px;
+	font: inherit;
+	background: #f7fafc;
+	color: #1a202c;
+	outline: none;
+	transition: all 0.2s ease;
+	box-sizing: border-box;
+}
+
+.search-box input:focus {
+	border-color: #8b5e34;
+	background: #ffffff;
+	box-shadow: 0 0 0 3px rgba(139, 94, 52, 0.1);
+}
+
+.button-group {
+	display: flex;
+	gap: 0.5rem;
+}
+
+/* Buttons */
+.btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+	padding: 0.75rem 1.25rem;
+	border-radius: 10px;
+	font-weight: 600;
+	font-size: 0.95rem;
+	cursor: pointer;
+	transition: all 0.2s ease;
+	border: 1px solid transparent;
+}
+
+.btn-primary {
+	background: #8b5e34;
+	color: #ffffff;
+}
+
+.btn-primary:hover {
+	background: #724c29;
+}
+
+.btn-secondary {
+	background: #f7fafc;
+	border-color: #e2e8f0;
+	color: #4a5568;
+}
+
+.btn-secondary:hover {
+	background: #edf2f7;
+}
+
+.btn-icon {
+	width: 2.75rem;
+	height: 2.75rem;
+	border-radius: 10px;
+	border: 1px solid #e2e8f0;
+	background: #ffffff;
+	color: #4a5568;
+	cursor: pointer;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	transition: all 0.2s ease;
+}
+
+.btn-icon:hover {
+	background: #f7fafc;
+	color: #1a202c;
+	border-color: #cbd5e0;
+}
+
+/* States (Loading, Empty, Error) */
+.state {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 1rem;
+	padding: 5rem 2rem;
+	text-align: center;
+	background: #f8fafc;
+	border-radius: 16px;
+	border: 1px dashed #e2e8f0;
+	color: #718096;
+}
+
+.state i {
+	font-size: 2rem;
+	color: #a0aec0;
+}
+
+.state--error i {
+	color: #e53e3e;
+}
+
+.state p {
+	margin: 0;
+	font-size: 1rem;
+}
+
+/* Products Grid */
+.products-grid {
+	display: grid;
+	gap: 2rem;
+	grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+}
+
+/* Product Card */
+.product-card {
+	display: flex;
+	flex-direction: column;
+	background: transparent;
+	transition: transform 0.2s ease;
+}
+
+.product-card__image-wrap {
+	position: relative;
+	width: 100%;
+	aspect-ratio: 1;
+	border-radius: 12px;
+	overflow: hidden;
+	background: #f7fafc;
+	border: 1px solid #edf2f7;
+}
+
+.product-card__image {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	transition: transform 0.3s ease;
+}
+
+.product-card:hover .product-card__image {
+	transform: scale(1.03);
+}
+
+.product-card__placeholder {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: #cbd5e0;
+	font-size: 2.5rem;
+}
+
+/* Action Buttons inside Card Image */
+.product-card__actions {
+	position: absolute;
+	top: 0.75rem;
+	right: 0.75rem;
+	display: flex;
+	gap: 0.5rem;
+	opacity: 0;
+	transform: translateY(-4px);
+	transition: all 0.2s ease;
+}
+
+.product-card__image-wrap:hover .product-card__actions {
+	opacity: 1;
+	transform: translateY(0);
+}
+
+.action-btn {
+	width: 2.25rem;
+	height: 2.25rem;
+	border-radius: 50%;
+	background: #ffffff;
+	border: none;
+	color: #4a5568;
+	box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	transition: all 0.2s ease;
+}
+
+.action-btn:hover {
+	background: #f7fafc;
+	color: #1a202c;
+	transform: scale(1.05);
+}
+
+.action-btn--danger {
+	color: #e53e3e;
+}
+
+.action-btn--danger:hover {
+	background: #fff5f5;
+	color: #c53030;
+}
+
+/* Product Card Content */
+.product-card__content {
+	padding: 1rem 0 0;
+}
+
+.product-card__meta {
+	display: flex;
+	align-items: center;
+	gap: 0.35rem;
+	font-size: 0.75rem;
+	color: #a0aec0;
+	margin-bottom: 0.25rem;
+}
+
+.product-card__separator {
+	color: #cbd5e0;
+}
+
+.product-card__id {
+	font-weight: 500;
+}
+
+.product-card__category {
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	font-weight: 600;
+	color: #8b5e34;
+}
+
+.product-card__title {
+	margin: 0;
+	font-size: 1.1rem;
+	font-weight: 600;
+	color: #1a202c;
+}
+
+.product-card__description {
+	margin: 0.35rem 0 0;
+	font-size: 0.9rem;
+	line-height: 1.5;
+	color: #718096;
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}
+
+/* Responsive adjustments */
+@media (min-width: 768px) {
+	.products-header {
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: flex-end;
+	}
+
+	.header-actions {
+		flex-wrap: nowrap;
+	}
+}
+
+/* Dialog Styles */
+.product-dialog {
+	padding: 0;
+	border: none;
+	border-radius: 16px;
+	background: #ffffff;
+	box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+	max-width: 90vw;
+	width: 440px;
+}
+
+.product-dialog::backdrop {
+	background: rgba(0, 0, 0, 0.35);
+	backdrop-filter: blur(4px);
+}
+
+.product-dialog__content {
+	padding: 2.25rem;
+}
+
+.product-dialog__content h3 {
+	margin: 0 0 1.5rem;
+	font-size: 1.35rem;
+	font-weight: 700;
+	color: #1a202c;
+}
+
+.form-group {
+	margin-bottom: 1.25rem;
+}
+
+.form-group label {
+	display: block;
+	margin-bottom: 0.5rem;
+	font-size: 0.85rem;
+	font-weight: 600;
+	color: #4a5568;
+}
+
+.form-group .required {
+	color: #e53e3e;
+}
+
+.form-group input,
+.form-group textarea {
+	width: 100%;
+	padding: 0.75rem 1rem;
+	border: 1px solid #e2e8f0;
+	border-radius: 8px;
+	font: inherit;
+	background: #f7fafc;
+	color: #1a202c;
+	transition: all 0.2s ease;
+	box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+	outline: none;
+	border-color: #8b5e34;
+	background: #ffffff;
+	box-shadow: 0 0 0 3px rgba(139, 94, 52, 0.1);
+}
+
+.form-group textarea {
+	resize: vertical;
+}
+
+.product-dialog__actions {
+	display: flex;
+	justify-content: flex-end;
+	gap: 0.75rem;
+	margin-top: 2rem;
+}
+
+.dialog-btn {
+	padding: 0.65rem 1.25rem;
+	border: 1px solid transparent;
+	border-radius: 8px;
+	font-weight: 600;
+	font-size: 0.95rem;
+	cursor: pointer;
+	transition: all 0.2s ease;
+}
+
+.dialog-btn--secondary {
+	background: #ffffff;
+	border-color: #e2e8f0;
+	color: #4a5568;
+}
+
+.dialog-btn--secondary:hover {
+	background: #f7fafc;
+	color: #1a202c;
+}
+
+.dialog-btn--primary {
+	background: #8b5e34;
+	color: #ffffff;
+}
+
+.dialog-btn--primary:hover {
+	background: #724c29;
+}
+
+/* DVD screensaver animation for background video */
+.dvd-container {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	pointer-events: none;
+	z-index: -1;
+	overflow: hidden;
+}
+
+.dvd-video {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 180px;
+	height: auto;
+	opacity: 0.68;
+	/* Set opacity back to a subtle 18% so it is elegant */
+	border-radius: 12px;
+	will-change: transform;
+}
+
+.form-group input[type="file"] {
+	padding: 0.5rem 0.75rem;
+	cursor: pointer;
+}
+
+.form-group input[type="file"]::file-selector-button {
+	border: none;
+	background: #8b5e34;
+	color: #ffffff;
+	padding: 0.4rem 0.8rem;
+	border-radius: 6px;
+	font-weight: 600;
+	font-size: 0.85rem;
+	cursor: pointer;
+	margin-right: 0.75rem;
+	transition: background 0.2s ease;
+}
+
+.form-group input[type="file"]::file-selector-button:hover {
+	background: #724c29;
+}

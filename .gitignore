@@ -5,11 +5,13 @@
 /tmp
 /out-tsc
 /bazel-out
-
+.env
 # Node
 /node_modules
 npm-debug.log
 yarn-error.log
+.agents
+skills-lock.json
 
 # IDEs and editors
 .idea/
