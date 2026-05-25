@@ -1,0 +1,7 @@
+.contenedor-productos { padding: 24px; }
+.contenedor-productos h2 { margin-bottom: 20px; font-size: 24px; font-weight: 600; }
+.tabla-productos { width: 100%; border-collapse: collapse; background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+.tabla-productos th, .tabla-productos td { padding: 12px; border-bottom: 1px solid #e5e5e5; text-align: left; }
+.tabla-productos th { background: #f5f5f5; font-weight: 600; }
+.mensaje { padding: 16px; background: #f4f4f4; border-radius: 6px; }
+.error { padding: 16px; background: #ffe5e5; color: #b00020; border-radius: 6px; margin-bottom: 16px; }
